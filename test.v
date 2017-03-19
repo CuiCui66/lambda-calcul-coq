@@ -60,3 +60,11 @@ end.
 Definition beta_eq (t1 : lterm) (t2 : lterm) : Prop :=
     exists (n : nat), beta_eq' n t1 t2.
 
+Definition Y : lterm :=
+    abs (app (abs (app (var 1) (app (var 0) (var 0))))
+             (abs (app (var 1) (app (var 0) (var 0))))).
+
+Theorem Y_fixpoint: forall (f : lterm), app Y f = app f (app Y f).
+Proof.
+Qed.
+
