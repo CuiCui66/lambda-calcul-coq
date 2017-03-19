@@ -19,7 +19,7 @@ Require Import Arith.
 
 Fixpoint offset (t : lterm) (decal :nat) (limit : nat) : lterm :=
   match t with
-  | var i => if leb i limit then var i else var (i+decal)
+  | var i => if leb (i+1) limit then var i else var (i+decal)
   | app t1 t2 => app (offset t1 decal limit) (offset t2 decal limit)
   | abs t0 => abs (offset t0 decal (S limit))
   end. 
@@ -61,10 +61,14 @@ Definition beta_eq (t1 : lterm) (t2 : lterm) : Prop :=
     exists (n : nat), beta_eq' n t1 t2.
 
 Definition Y : lterm :=
-    abs (app (abs (app (var 1) (app (var 0) (var 0))))
-             (abs (app (var 1) (app (var 0) (var 0))))).
+    abs (app (abs (app (var 2) (app (var 1) (var 1))))
+             (abs (app (var 2) (app (var 1) (var 1))))).
 
-Theorem Y_fixpoint: forall (f : lterm), app Y f = app f (app Y f).
+Theorem Y_fixpoint: forall (f : lterm), beta_eq (app Y f) (app f (app Y f)).
 Proof.
-Qed.
+intro. exists 3. simpl.
+right. right. right. left.
+exists (substi Y 0 f). split.
+ - simpl. reflexivity.
+ - 
 
